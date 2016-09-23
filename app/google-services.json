@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "608520442006",
+    "firebase_url": "https://stride-bc2f4.firebaseio.com",
+    "project_id": "stride-bc2f4",
+    "storage_bucket": "stride-bc2f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608520442006:android:00dfa2bfafc25e48",
+        "android_client_info": {
+          "package_name": "com.example.herbert.stride"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608520442006-co3o5tqg5lnghm36h00e8mtkahlmqkje.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADF7slxUJWTIqf4CD0c8nqPxocGckD3_g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
