@@ -24,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText mEmail;
     private EditText mPassword;
     private EditText mRePassword;
+
     private Button mRegisterButton;
 
     private FirebaseAuth mAuth;
@@ -48,16 +49,19 @@ public class SignUpActivity extends AppCompatActivity {
         mRegisterButton = (Button) findViewById(R.id.registerButton);
 
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
-                if (mPassword.getText().toString().trim() != mRePassword.getText().toString().trim()){
-                    Toast.makeText(SignUpActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
-                    Log.d("Password", mPassword.getText().toString().trim());
-                    Log.d("Retyped Password", mRePassword.getText().toString().trim());
+                if (mPassword.getText().toString().trim().equals(mRePassword.getText().toString().trim())){
+                    startRegistration();
+//                  Toast.makeText(SignUpActivity.this, "Password matches", Toast.LENGTH_SHORT).show();
+//                  Log.d("Password", mPassword.getText().toString().trim());
+//                  Log.d("Retyped Password", mRePassword.getText().toString().trim());
+
                 }
                 else{
-                    Toast.makeText(SignUpActivity.this, "Start the registration", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
 //                    startRegistration();
                 }
             }
@@ -84,6 +88,10 @@ public class SignUpActivity extends AppCompatActivity {
                                 current_user_db.child("name").setValue(name);
 
                                 mProgress.dismiss();
+                            }
+                            else{
+                                mProgress.dismiss();
+                                Log.d("Creating User", "Error creating user");
                             }
                         }
                     });
