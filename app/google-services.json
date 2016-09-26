@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "608520442006-8ditr0gaeirc6nftkqj56rfqpjbuj2t7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.herbert.stride",
+            "certificate_hash": "7752A53C90448F29723CBD6D1ED46ECEC2A5B1C9"
+          }
+        },
+        {
           "client_id": "608520442006-co3o5tqg5lnghm36h00e8mtkahlmqkje.apps.googleusercontent.com",
           "client_type": 3
         }
