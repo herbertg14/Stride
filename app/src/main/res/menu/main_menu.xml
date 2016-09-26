@@ -4,7 +4,8 @@
 
     <item android:id="@+id/action_settings"
         android:title="settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:checkable="false" />
 
     <item android:id="@+id/action_logout"
         android:title="Log Out"

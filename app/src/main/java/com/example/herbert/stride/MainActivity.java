@@ -41,14 +41,11 @@ public class MainActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
-
-
     }
 
     @Override

@@ -77,49 +77,52 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if(!TextUtils.isEmpty(name) && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-//                    mProgress.setMessage("Creating Account...");
-//                    mProgress.show();
-//                    mProgress.dismiss();
+                    mProgress.setMessage("Creating Account...");
+                    mProgress.show();
+                    mProgress.dismiss();
 
-//                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()){
-////                                mProgress.stop();
-////                                String user_id = mAuth.getCurrentUser().getUid();
-//
-////                                DatabaseReference current_user_db = mDatabase.child(user_id);
-//
-////                                current_user_db.child("name").setValue(name);
-//
-//                                mProgress.dismiss();
-//                            }
-//                            else{
-//                                mProgress.dismiss();
-//                                Toast.makeText(SignUpActivity.this, "Unable to create user", Toast.LENGTH_SHORT).show();
-//                                Log.d("Creating User", "Error creating user");
-//                            }
-//                        }
-//                    });
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-//                                    Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                Log.d("Creating User", "Successfully created user");
 
-                                    // If sign in fails, display a message to the user. If sign in succeeds
-                                    // the auth state listener will be notified and logic to handle the
-                                    // signed in user can be handled in the listener.
-                                    if (!task.isSuccessful()) {
-                                        Log.d("User", "create user was unsuccessful");
-                                    }
-                                    else{
-                                        Log.d("User", "Creating user was successful");
-                                    }
+//                                String user_id = mAuth.getCurrentUser().getUid();
 
-                                    // ...
-                                }
-                            });
+//                                DatabaseReference current_user_db = mDatabase.child(user_id);
+
+//                                current_user_db.child("name").setValue(name);
+
+                                mProgress.dismiss();
+                            }
+                            else{
+                                mProgress.dismiss();
+                                Toast.makeText(SignUpActivity.this, "Unable to create user", Toast.LENGTH_SHORT).show();
+                                Log.d("Creating User", "Error creating user");
+                            }
+                        }
+                    });
+
+
+//                    mAuth.createUserWithEmailAndPassword(email, password)
+//                            .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<AuthResult> task) {
+////                                    Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+//
+//                                    // If sign in fails, display a message to the user. If sign in succeeds
+//                                    // the auth state listener will be notified and logic to handle the
+//                                    // signed in user can be handled in the listener.
+//                                    if (!task.isSuccessful()) {
+//                                        Log.d("User", "create user was unsuccessful");
+//                                    }
+//                                    else{
+//                                        Log.d("User", "Creating user was successful");
+//                                    }
+//
+//                                    // ...
+//                                }
+//                            });
                 }
 
             }
