@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
 //                if the user is not signed in then send the user to the login activity and clear the top so the user won't be able to go back
                 if (firebaseAuth.getCurrentUser() == null){
-                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class );
+                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                    user won't be able to go back
                     loginIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(loginIntent);
                 }
