@@ -1,6 +1,7 @@
 package com.example.herbert.stride;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -76,16 +77,26 @@ public class SignUpActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
 
+//                      get the user id
                         String user_id = mAuth.getCurrentUser().getUid();
 
+//                      get a reference to the user database node
+//                        DatabaseReference current_user_db = mDatabase.child(user_id).child("User_Data");
                         DatabaseReference current_user_db = mDatabase.child(user_id);
+
+//                        DatabaseReference user_data = current_user_db.child("User_data");
 
                         current_user_db.child("Name").setValue(name);
 
                         mProgress.dismiss();
 
-
-
+                        Intent mainIntent = new Intent(SignUpActivity.this, MainActivity.class);
+                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(mainIntent);
+                    }
+                    else{
+                        mProgress.dismiss();
+                        Toast.makeText(SignUpActivity.this, "Error Creating User", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

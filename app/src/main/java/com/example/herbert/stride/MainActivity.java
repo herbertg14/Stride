@@ -36,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
 //    create the menu tab
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -46,13 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.action_logout){
+
+            mAuth.signOut();
+        }
+
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mAuth.addAuthStateListener(mAuthListener);
     }
 }
