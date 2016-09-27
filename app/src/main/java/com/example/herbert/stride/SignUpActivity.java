@@ -21,6 +21,8 @@ import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText mName;
@@ -56,7 +58,17 @@ public class SignUpActivity extends AppCompatActivity {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startRegister();
+                String password = mPassword.getText().toString().trim();
+                String rePassword = mRePassword.getText().toString().trim();
+                if (password.length() == rePassword.length() && (password.equals(rePassword)) && (password.length() >= 6)){
+                    startRegister();
+                }
+                else if (!(password.equals(rePassword))) {
+                    Toast.makeText(SignUpActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
+                }
+                else if (password.length() < 6){
+                    Toast.makeText(SignUpActivity.this, "Password needs to be longer than 6 Characters", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -81,8 +93,8 @@ public class SignUpActivity extends AppCompatActivity {
                         String user_id = mAuth.getCurrentUser().getUid();
 
 //                      get a reference to the user database node
-//                        DatabaseReference current_user_db = mDatabase.child(user_id).child("User_Data");
-                        DatabaseReference current_user_db = mDatabase.child(user_id);
+                        DatabaseReference current_user_db = mDatabase.child(user_id).child("User_Data");
+//                        DatabaseReference current_user_db = mDatabase.child(user_id);
 
 //                        DatabaseReference user_data = current_user_db.child("User_data");
 
@@ -101,6 +113,12 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
 
+        }
+        else if (TextUtils.isEmpty(name)){
+            Toast.makeText(this, "Name Required", Toast.LENGTH_SHORT).show();
+        }
+        else if(TextUtils.isEmpty(email)){
+            Toast.makeText(this, "E-mail Required", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -20,7 +20,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="47dp"
         android:layout_alignParentStart="true"
-        android:hint="Enter Name"
+        android:hint="Name"
         android:padding="10dp" />
 
     <EditText
@@ -33,7 +33,7 @@
         android:layout_below="@+id/editTextName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
-        android:hint="Enter Email"
+        android:hint="E-mail"
         android:padding="10dp" />
 
     <EditText
@@ -44,7 +44,7 @@
         android:ems="10"
         android:layout_marginTop="15dp"
         android:id="@+id/editTextPassword"
-        android:hint="Enter Password"
+        android:hint="Password"
         android:padding="10dp"
         android:layout_below="@+id/editTextEmail"
         android:layout_alignParentStart="true" />
@@ -59,7 +59,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="15dp"
         android:id="@+id/editTextPassword2"
-        android:hint="Retype Password"
+        android:hint="Re-type Password"
         android:padding="10dp" />
 
     <Button
