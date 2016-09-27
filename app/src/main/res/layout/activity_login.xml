@@ -48,12 +48,13 @@
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:textAlignment="center"
         android:id="@+id/textViewRegister"
         android:text="Not a member? Register Here!"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonLogin"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
+        android:layout_marginTop="26dp"
+        android:textSize="18sp"
+        android:textAlignment="center" />
 </RelativeLayout>
