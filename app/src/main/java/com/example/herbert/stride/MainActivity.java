@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button resetButton;
     private Button startStopButton;
+    private Button mapButton;
 
     private long startTimeMillis;
     private long elapsedTimeMillis;
@@ -67,12 +68,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         secsTextView = (TextView) findViewById(R.id.textViewSecsValue);
         tenthsTextView = (TextView) findViewById(R.id.textViewTenthsValue);
 
+        //set Buttons
         resetButton = (Button) findViewById(R.id.buttonReset);
         startStopButton = (Button) findViewById(R.id.buttonStartStop);
+        mapButton = (Button) findViewById(R.id.buttonMap);
 
         //set listeners
         resetButton.setOnClickListener(this);
         startStopButton.setOnClickListener(this);
+        mapButton.setOnClickListener(this);
 
         //get preferences
         prefs = getSharedPreferences("Prefs", MODE_PRIVATE);
