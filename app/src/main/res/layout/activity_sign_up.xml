@@ -16,12 +16,15 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:background="@drawable/input_outline"
-        android:id="@+id/editTextName"
+        android:id="@+id/textDuration"
         android:layout_alignParentTop="true"
         android:layout_marginTop="47dp"
         android:layout_alignParentStart="true"
         android:hint="Name"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:text="Duration"
+        android:textStyle="normal|bold"
+        android:textAlignment="center" />
 
     <EditText
         android:background="@drawable/input_outline"
@@ -30,7 +33,7 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/editTextEmail"
-        android:layout_below="@+id/editTextName"
+        android:layout_below="@+id/textDuration"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:hint="E-mail"

@@ -76,8 +76,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".testing"
-            android:label="@string/title_activity_testing"></activity>
+            android:name=".RunMapActivity"
+            android:label="@string/title_activity_run_map" />
     </application>
 
 </manifest>

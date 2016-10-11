@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button resetButton;
     private Button startStopButton;
     private Button mapButton;
+    private Button saveButton;
 
     private long startTimeMillis;
     private long elapsedTimeMillis;
@@ -59,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int NOTIFICATION_ID = 1;
     private NotificationManager notificationManager;
 
+    private boolean runStopped;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +81,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resetButton = (Button) findViewById(R.id.buttonReset);
         startStopButton = (Button) findViewById(R.id.buttonStartStop);
         mapButton = (Button) findViewById(R.id.buttonMap);
+        saveButton = (Button) findViewById(R.id.buttonSave);
 
         //set listeners
         resetButton.setOnClickListener(this);
         startStopButton.setOnClickListener(this);
         mapButton.setOnClickListener(this);
+        saveButton.setOnClickListener(null);
+        saveButton.setVisibility(View.INVISIBLE);
 
         //get preferences
         prefs = getSharedPreferences("Prefs", MODE_PRIVATE);
 
         //create intents
         serviceIntent = new Intent(this, RunTrackerService.class);
-        //not implemented yet
+
+        runStopped = false;
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -115,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edit.putBoolean("stopwatchOn", stopwatchOn);
         edit.putLong("startTimeMillis", startTimeMillis);
         edit.putLong("elapsedTimeMillis", elapsedTimeMillis);
+
+        edit.putBoolean("runStopped", runStopped);
         edit.commit();
     }
 
@@ -126,11 +138,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startTimeMillis = prefs.getLong("startTimeMillis", System.currentTimeMillis());
         elapsedTimeMillis = prefs.getLong("elapsedTimeMillis", 0);
 
+        runStopped = prefs.getBoolean("runstopped", false);
+
         if(stopwatchOn){
             start();
         }else{
             updateViews(elapsedTimeMillis);
+            if (runStopped){
+                saveButton.setOnClickListener(this);
+                saveButton.setVisibility(View.VISIBLE);
+            }
         }
+
+
 
     }
 
@@ -141,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.addAuthStateListener(mAuthListener);
     }
 
-//    create the menu tab
+    //create the menu tab
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -160,30 +180,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
+    //onClick event listener for buttons
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.buttonStartStop:
                 if (stopwatchOn){
+                    saveButton.setOnClickListener(this);
+                    saveButton.setVisibility(View.VISIBLE);
                     stop();
                 }
                 else {
+                    saveButton.setOnClickListener(null);
+                    saveButton.setVisibility(View.INVISIBLE);
                     start();
                 }
                 break;
             case R.id.buttonReset:
+                saveButton.setOnClickListener(null);
+                saveButton.setVisibility(View.INVISIBLE);
                 reset();
                 break;
             case R.id.buttonMap:
-                Intent runMap = new Intent(this, testing.class);
+                Intent runMap = new Intent(this, RunMapActivity.class);
                 startActivity(runMap);
+                break;
+            case R.id.buttonSave:
+                save();
                 break;
         }
     }
 
-    //start the stop watch
-    private void start() {
 
+    /////////////////////////////////////////////////////////
+    //Set Private methods
+    /////////////////////////////////////////////////////////
+    private void save(){
+        Toast.makeText(MainActivity.this, "This is the save function", Toast.LENGTH_SHORT).show();
+        saveButton.setOnClickListener(null);
+        saveButton.setVisibility(View.INVISIBLE);
+        this.reset();
+    }
+
+    //start stopwatch
+    private void start() {
+        runStopped = false;
         //make sure old timer thread has been cancelled
         if (timer != null){
             timer.cancel();
@@ -197,6 +238,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //update variables and UI
         stopwatchOn = true;
         startStopButton.setText("Stop");
+//        startStopButton.setBackgroundColor(Color.RED);
+
+        //set the save button to invisable and unclicable
+//        saveButton.setOnClickListener(null);
 
         // if GPS is not enabled, start GPS settings activity
         LocationManager locationManager =
@@ -225,28 +270,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         timer.scheduleAtFixedRate(task, 0, 100);
     }
 
-    //stop the stop watch
+    //stop stopwatch
     private void stop() {
+        runStopped = true;
         //stop timer
         stopwatchOn = false;
         if (timer != null){
             timer.cancel();
         }
         startStopButton.setText("Start");
+//        startStopButton.setBackgroundColor(Color.GREEN);
 
         // stop service
         stopService(serviceIntent);
         stopNotification();
 
         updateViews(elapsedTimeMillis);
+
+        //set the save button to clicakbe and visable
+//        saveButton.setOnClickListener(this);
+//        saveButton.setVisibility(View.);
+//        Button saveButton = new Button(this);
+//        saveButton.setText("Save");
+//
+//        LinearLayout ll = (LinearLayout)findViewById(R.id.main_layout);
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        ll.addView(saveButton, lp);
     }
 
-
-
-    //reset the stop watch
+    //reset stopwatch
     private void reset(){
+        runStopped = false;
         //stop the timer
         this.stop();
+
+        //set the save button to invisable and unclickable
+//        saveButton.setOnClickListener(null);
+//        saveButton.setVisibility(View.INVISIBLE);
 
         // clear the list of locations in the database
         RunTrackerDB db = new RunTrackerDB(this);
@@ -257,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Set notification when run has started
     private void startNotification() {
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -278,13 +339,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
+    //Stop notification when run has stopped
     private void stopNotification() {
         if (notificationManager != null){
             notificationManager.cancel(NOTIFICATION_ID);
         }
     }
 
-    private void updateViews(long elapsedTimeMillis) {
+    private void updateViews(final long elapsedTimeMillis) {
         elapsedTenths = (int) ((elapsedTimeMillis/100) % 10);
         elapsedSecs = (int) ((elapsedTimeMillis/1000) % 60);
         elapsedMins = (int) ((elapsedTimeMillis/(60*1000)) % 60);

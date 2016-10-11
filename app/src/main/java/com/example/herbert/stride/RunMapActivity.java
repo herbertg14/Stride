@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class testing extends FragmentActivity
+public class RunMapActivity extends FragmentActivity
         implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleMap mMap;
@@ -193,7 +193,7 @@ public class testing extends FragmentActivity
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                testing.this.runOnUiThread(new Runnable() {
+                RunMapActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         updateMap();
