@@ -263,19 +263,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         saveButton.setOnClickListener(null);
         saveButton.setVisibility(View.INVISIBLE);
 
-        RunTrackerDB db = new RunTrackerDB(this);
-        locationList =  db.getLocations();
-        if (locationList.size() > 0){
-            ///loop and make a json object of locations to save to firebase by user
-            Log.d("#####Locations", locationList.toString());
-
-            //total distance
-            float totalDistace = calculatedMiles() /1609;
-
-            String string = String.valueOf(totalDistace);
-            Log.d("#####Distance", string);
-
-        }
+//        RunTrackerDB db = new RunTrackerDB(this);
+//        locationList =  db.getLocations();
+//        if (locationList.size() > 0){
+//            ///loop and make a json object of locations to save to firebase by user
+//            Log.d("#####Locations", locationList.toString());
+//
+//            //total distance
+//            float totalDistace = calculatedMiles();
+//            int fullMiles = (int) (totalDistace/1609);
+//            int fractionMIles = (int)(totalDistace/1609 * 100);
+//
+//            updateView(milesTextView,fullMiles,2);
+//            updateView(milesDecimalTextView, fractionMIles,2);
+//
+//            String string = String.valueOf(totalDistace);
+//            String whole = String.valueOf(fullMiles);
+//            String fraction = String.valueOf(fractionMIles);
+//            Log.d("#####Total Distance", string);
+//            Log.d("#####Whole Miles", whole);
+//            Log.d("#####Fraction Miles", fraction);
+//
+//
+//        }
         this.reset();
     }
 
@@ -372,6 +382,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         elapsedTimeMillis = 0;
         updateViews(elapsedTimeMillis);
 
+        milesTextView.setText("00");
+        milesDecimalTextView.setText("00");
+
         //steps
         stepsAtReset = stepsInSensor;
 
@@ -424,6 +437,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         updateView(minsTextView, elapsedMins, 2);
         updateView(secsTextView, elapsedSecs, 2);
         updateView(tenthsTextView, elapsedTenths, 1);
+
+        RunTrackerDB db = new RunTrackerDB(this);
+        locationList =  db.getLocations();
+        if (locationList.size() > 0){
+            ///loop and make a json object of locations to save to firebase by user
+//            Log.d("#####Locations", locationList.toString());
+
+            //total distance
+            float totalDistace = calculatedMiles();
+            int fullMiles = (int) (totalDistace/1609);
+            int fractionMIles = (int)(totalDistace/1609 * 100);
+
+            updateView(milesTextView,fullMiles,2);
+            updateView(milesDecimalTextView, fractionMIles,2);
+
+//            String string = String.valueOf(totalDistace);
+//            String whole = String.valueOf(fullMiles);
+//            String fraction = String.valueOf(fractionMIles);
+//            Log.d("#####Total Distance", string);
+//            Log.d("#####Whole Miles", whole);
+//            Log.d("#####Fraction Miles", fraction);
+
+
+        }
     }
 
     private void updateView(final TextView textView, final int elapsedTime, final int minIntDigits) {
@@ -458,8 +495,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         return totalDistance;
     }
-
-
 
 
     ///////////////////////////////////////////////////////////
