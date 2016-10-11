@@ -141,7 +141,11 @@ public class testing extends FragmentActivity
 
     private void setCurrentLocationMarker(){
         if (mMap != null) {
-
+//            try {
+//                locationManager.removeUpdates(GPSListener.this);
+//            } catch (SecurityException e) {
+//                Log.e("PERMISSION_EXCEPTION","PERMISSION_NOT_GRANTED");
+//            }
             // get current location
             Location location = LocationServices.FusedLocationApi
                     .getLastLocation(googleApiClient);
