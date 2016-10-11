@@ -11,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,9 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.disklrucache.DiskLruCache;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.vision.text.Text;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView minsTextView;
     private TextView secsTextView;
     private TextView tenthsTextView;
+    private TextView milesTextView;
+    private TextView milesDecimalTextView;
 
     private Button resetButton;
     private Button startStopButton;
@@ -76,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int stepsInSensor = 0;
     private int stepsAtReset;
 
+    private List<Location> locationList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +97,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         minsTextView = (TextView) findViewById(R.id.textViewMinsValue);
         secsTextView = (TextView) findViewById(R.id.textViewSecsValue);
         tenthsTextView = (TextView) findViewById(R.id.textViewTenthsValue);
+        milesTextView = (TextView) findViewById(R.id.textViewMiles);
+        milesDecimalTextView = (TextView) findViewById(R.id.textViewMilesDecimal);
+
 
         //set Buttons
         resetButton = (Button) findViewById(R.id.buttonReset);
@@ -101,10 +114,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         saveButton.setOnClickListener(null);
         saveButton.setVisibility(View.INVISIBLE);
 
-        //get preferences
+        //set shared preferences
         prefs = getSharedPreferences("Prefs", MODE_PRIVATE);
 
-        //create intents
+        //set service intents
         serviceIntent = new Intent(this, RunTrackerService.class);
 
         //boolean to check if run is in progress
@@ -114,9 +127,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         steps = (TextView) findViewById(R.id.textViewSteps);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepsAtReset = prefs.getInt("stepsAtReset", 0);
-
-
-
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -252,6 +262,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         Toast.makeText(MainActivity.this, "This is the save function", Toast.LENGTH_SHORT).show();
         saveButton.setOnClickListener(null);
         saveButton.setVisibility(View.INVISIBLE);
+
+        RunTrackerDB db = new RunTrackerDB(this);
+        locationList =  db.getLocations();
+        if (locationList.size() > 0){
+            ///loop and make a json object of locations to save to firebase by user
+            Log.d("#####Locations", locationList.toString());
+
+            //total distance
+            float totalDistace = calculatedMiles() /1609;
+
+            String string = String.valueOf(totalDistace);
+            Log.d("#####Distance", string);
+
+        }
         this.reset();
     }
 
@@ -415,6 +439,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
     }
 
+    private float calculatedMiles(){
+        float totalDistance = 0;
+
+        RunTrackerDB db = new RunTrackerDB(this);
+        locationList = db.getLocations();
+
+        if (locationList.size() > 0) {
+            Location current = locationList.get(0);
+            for (Location l : locationList) {
+//                LatLng currentPoint = new LatLng(current.getLatitude(), current.getLongitude());
+//                LatLng nextPoint = new LatLng(l.getLatitude(), l.getLongitude());
+                float distance = current.distanceTo(l);
+                totalDistance += distance;
+                current = l;
+            }
+        }
+
+        return totalDistance;
+    }
+
+
+
+
+    ///////////////////////////////////////////////////////////
+    //Steps sensor functions
+    ///////////////////////////////////////////////////////////
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         if (activityRunning){
@@ -432,6 +482,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-
+        //sensor method
     }
 }
