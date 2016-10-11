@@ -3,9 +3,14 @@ package com.example.herbert.stride;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -29,7 +34,7 @@ import java.text.NumberFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -65,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean runStopped;
 
+    private SensorManager sensorManager;
+    private TextView steps;
+    boolean activityRunning;
+    private int stepsInSensor = 0;
+    private int stepsAtReset;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +107,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //create intents
         serviceIntent = new Intent(this, RunTrackerService.class);
 
+        //boolean to check if run is in progress
         runStopped = false;
+
+        //steps
+        steps = (TextView) findViewById(R.id.textViewSteps);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        stepsAtReset = prefs.getInt("stepsAtReset", 0);
+
+
+
+
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -128,11 +149,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         edit.putBoolean("runStopped", runStopped);
         edit.commit();
+
+        //sensor
+        activityRunning = false;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //sensor
+        activityRunning = true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if (countSensor != null){
+            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+        }else{
+            Toast.makeText(this, "Count sensor not available", Toast.LENGTH_LONG).show();
+        }
 
         stopwatchOn = prefs.getBoolean("stopwatchOn", false);
         startTimeMillis = prefs.getLong("startTimeMillis", System.currentTimeMillis());
@@ -315,6 +348,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         elapsedTimeMillis = 0;
         updateViews(elapsedTimeMillis);
 
+        //steps
+        stepsAtReset = stepsInSensor;
+
+        SharedPreferences.Editor editor = getSharedPreferences("Prefs", MODE_PRIVATE).edit();
+        editor.putInt("stepsAtReset", stepsAtReset);
+        editor.commit();
+        steps.setText(String.valueOf(0));
+
     }
 
     //Set notification when run has started
@@ -372,5 +413,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 textView.setText(number.format(elapsedTime));
             }
         });
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if (activityRunning){
+            float a = sensorEvent.values[0];
+            int b;
+            b = (int)a;
+//            steps.setText(String.valueOf(sensorEvent.values[0]));
+            stepsInSensor = Integer.valueOf(b);
+            int stepsSinceReset = stepsInSensor - stepsAtReset;
+            steps.setText(String.valueOf(stepsSinceReset));
+        }else{
+            sensorEvent.values[0] = 0;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 }
