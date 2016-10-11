@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.disklrucache.DiskLruCache;
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         prefs = getSharedPreferences("Prefs", MODE_PRIVATE);
 
         //create intents
+        serviceIntent = new Intent(this, RunTrackerService.class);
         //not implemented yet
 
         mAuth = FirebaseAuth.getInstance();
@@ -170,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonReset:
                 reset();
                 break;
+            case R.id.buttonMap:
+                Intent runMap = new Intent(this, testing.class);
+                startActivity(runMap);
+                break;
         }
     }
 
@@ -190,6 +198,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stopwatchOn = true;
         startStopButton.setText("Stop");
 
+        // if GPS is not enabled, start GPS settings activity
+        LocationManager locationManager =
+                (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(this, "Please activate GPS settings",
+                    Toast.LENGTH_LONG).show();
+            Intent intent =
+                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+
+        // start service
+        startService(serviceIntent);
         startNotification();
 
         TimerTask task = new TimerTask() {
@@ -213,6 +234,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         startStopButton.setText("Start");
 
+        // stop service
+        stopService(serviceIntent);
         stopNotification();
 
         updateViews(elapsedTimeMillis);
@@ -224,6 +247,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void reset(){
         //stop the timer
         this.stop();
+
+        // clear the list of locations in the database
+        RunTrackerDB db = new RunTrackerDB(this);
+        db.deleteLocations();
 
         elapsedTimeMillis = 0;
         updateViews(elapsedTimeMillis);

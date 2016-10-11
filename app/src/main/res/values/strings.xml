@@ -12,9 +12,8 @@
     <!--<string name="error_incorrect_password">This password is incorrect</string>-->
     <!--<string name="error_field_required">This field is required</string>-->
     <!--<string name="permission_rationale">"Contacts permissions are needed for providing email-->
-        <!--completions."-->
+    <!--completions."-->
     <!--</string>-->
-
 
 
     <string name="separator_main">:</string>
@@ -28,4 +27,9 @@
 
     <string name="content_text">Run in progress...</string>
     <string name="stopwatch">View Stopwatch</string>
+    <string name="title_activity_run_map">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_testing">Map</string>
 </resources>
