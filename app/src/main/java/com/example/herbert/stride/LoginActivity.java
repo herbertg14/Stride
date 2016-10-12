@@ -2,6 +2,7 @@ package com.example.herbert.stride;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,6 +50,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mPassword = (EditText) findViewById(R.id.editTextPassword);
         mLoginButton = (Button) findViewById(R.id.buttonLogin);
         mLoginButton.setOnClickListener(this);
+
+        Typeface myTypeface = Typeface.createFromAsset(getAssets(),"tusj.ttf");
+        TextView mytitle = (TextView) findViewById(R.id.textViewTitle);
+        mytitle.setTypeface(myTypeface);
 
 
     }
