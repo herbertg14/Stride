@@ -27,7 +27,7 @@
     <string name="map">View Map</string>
 
     <string name="content_text">Run in progress...</string>
-    <string name="stopwatch">View Stopwatch</string>
+    <string name="stopwatch">View Stats</string>
     <string name="title_activity_run_map">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->

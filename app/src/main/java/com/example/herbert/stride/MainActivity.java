@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         int flags = PendingIntent.FLAG_UPDATE_CURRENT;
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, flags);
 
-        int icon = R.mipmap.ic_launcher;
+        int icon = R.mipmap.ic_launcherstride;
         Notification notification=
                 new NotificationCompat.Builder(getApplicationContext())
                         .setSmallIcon(icon)

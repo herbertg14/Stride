@@ -11,20 +11,6 @@
     tools:context="com.example.herbert.stride.SignUpActivity">
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:background="@drawable/input_outline"
-        android:id="@+id/textDuration"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="47dp"
-        android:layout_alignParentStart="true"
-        android:hint="Name"
-        android:padding="10dp"
-        android:textAlignment="viewStart" />
-
-    <EditText
         android:background="@drawable/input_outline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,6 +58,20 @@
         android:id="@+id/registerButton"
         android:layout_marginTop="79dp"
         android:layout_below="@+id/editTextPassword"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:background="@drawable/input_outline"
+        android:id="@+id/textDuration"
+        android:layout_marginTop="98dp"
+        android:hint="Name"
+        android:padding="10dp"
+        android:textAlignment="viewStart"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>
