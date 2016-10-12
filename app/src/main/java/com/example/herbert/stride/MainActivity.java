@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView tenthsTextView;
     private TextView milesTextView;
     private TextView milesDecimalTextView;
+    private TextView avgPaceTextView;
 
     private Button resetButton;
     private Button startStopButton;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         tenthsTextView = (TextView) findViewById(R.id.textViewTenthsValue);
         milesTextView = (TextView) findViewById(R.id.textViewMiles);
         milesDecimalTextView = (TextView) findViewById(R.id.textViewMilesDecimal);
+        avgPaceTextView = (TextView) findViewById(R.id.textViewAvgPace);
 
 
         //set Buttons
@@ -263,30 +265,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         saveButton.setOnClickListener(null);
         saveButton.setVisibility(View.INVISIBLE);
 
-//        RunTrackerDB db = new RunTrackerDB(this);
-//        locationList =  db.getLocations();
-//        if (locationList.size() > 0){
-//            ///loop and make a json object of locations to save to firebase by user
-//            Log.d("#####Locations", locationList.toString());
-//
-//            //total distance
-//            float totalDistace = calculatedMiles();
-//            int fullMiles = (int) (totalDistace/1609);
-//            int fractionMIles = (int)(totalDistace/1609 * 100);
-//
-//            updateView(milesTextView,fullMiles,2);
-//            updateView(milesDecimalTextView, fractionMIles,2);
-//
-//            String string = String.valueOf(totalDistace);
-//            String whole = String.valueOf(fullMiles);
-//            String fraction = String.valueOf(fractionMIles);
-//            Log.d("#####Total Distance", string);
-//            Log.d("#####Whole Miles", whole);
-//            Log.d("#####Fraction Miles", fraction);
-//
-//
-//        }
         this.reset();
+//        this.reset();
     }
 
     //start stopwatch
@@ -307,8 +287,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         startStopButton.setText("Stop");
 //        startStopButton.setBackgroundColor(Color.RED);
 
-        //set the save button to invisable and unclicable
-//        saveButton.setOnClickListener(null);
 
         // if GPS is not enabled, start GPS settings activity
         LocationManager locationManager =
@@ -353,16 +331,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         stopNotification();
 
         updateViews(elapsedTimeMillis);
-
-        //set the save button to clicakbe and visable
-//        saveButton.setOnClickListener(this);
-//        saveButton.setVisibility(View.);
-//        Button saveButton = new Button(this);
-//        saveButton.setText("Save");
-//
-//        LinearLayout ll = (LinearLayout)findViewById(R.id.main_layout);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        ll.addView(saveButton, lp);
     }
 
     //reset stopwatch
@@ -391,6 +359,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences.Editor editor = getSharedPreferences("Prefs", MODE_PRIVATE).edit();
         editor.putInt("stepsAtReset", stepsAtReset);
         editor.commit();
+        steps.setText(String.valueOf(0));
         steps.setText(String.valueOf(0));
 
     }
@@ -452,12 +421,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             updateView(milesTextView,fullMiles,2);
             updateView(milesDecimalTextView, fractionMIles,2);
 
-//            String string = String.valueOf(totalDistace);
-//            String whole = String.valueOf(fullMiles);
-//            String fraction = String.valueOf(fractionMIles);
-//            Log.d("#####Total Distance", string);
-//            Log.d("#####Whole Miles", whole);
-//            Log.d("#####Fraction Miles", fraction);
+            int paceUpdate = (int) (totalDistace % 100);
+//            Log.d("####Pace for total",String.valueOf(totalDistace));
+            if (paceUpdate == 0){
+                Log.d("####Total Distance",String.valueOf(totalDistace) + "m");
+                float pace = (float) elapsedMins/totalDistace;
+//                avgPaceTextView.setText(String.valueOf(pace));
+                Log.d("####Pace Update", String.valueOf(pace) + "min/mi");
+            }
+
 
 
         }
@@ -485,8 +457,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (locationList.size() > 0) {
             Location current = locationList.get(0);
             for (Location l : locationList) {
-//                LatLng currentPoint = new LatLng(current.getLatitude(), current.getLongitude());
-//                LatLng nextPoint = new LatLng(l.getLatitude(), l.getLongitude());
                 float distance = current.distanceTo(l);
                 totalDistance += distance;
                 current = l;
