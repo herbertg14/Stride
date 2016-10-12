@@ -3,6 +3,7 @@ package com.example.herbert.stride;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -34,6 +36,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.vision.text.Text;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -44,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
+
+    private ProgressDialog mProgress;
 
     private TextView hoursTextView;
     private TextView minsTextView;
@@ -130,6 +137,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepsAtReset = prefs.getInt("stepsAtReset", 0);
 
+//        String user_id = mAuth.getCurrentUser().getUid();
+//        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id).child("Workouts");
+//        mProgress = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -262,11 +272,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /////////////////////////////////////////////////////////
     private void save(){
         Toast.makeText(MainActivity.this, "This is the save function", Toast.LENGTH_SHORT).show();
+//        mProgress.setMessage("Saving workout...");
+//        mProgress.show();
+//
+//        RunTrackerDB db = new RunTrackerDB(this);
+//        locationList = db.getLocations();
+//
+//        float TotalMiles = calculatedMiles()/1609;
+//
+//        if (locationList.size()> 0){
+//
+//            DatabaseReference newWorkout = mDatabase.push();
+//            newWorkout.child("map").setValue(locationList);
+//            newWorkout.child("Total Distance").setValue(TotalMiles);
+//            newWorkout.child("Testing").setValue("Testing");
+//        }
+
+
         saveButton.setOnClickListener(null);
         saveButton.setVisibility(View.INVISIBLE);
 
         this.reset();
 //        this.reset();
+
+//        mProgress.dismiss();
     }
 
     //start stopwatch

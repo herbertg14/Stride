@@ -48,7 +48,7 @@
         android:text="STRIDE"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
-        android:textSize="60dp"
+        android:textSize="70dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
